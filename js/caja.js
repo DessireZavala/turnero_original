@@ -36,12 +36,12 @@ function detectarAccion(e){
 	
 			var datos = 'registrar=atencion'+'&ocupado='+encodeURIComponent(ocupado)+'&idCaja='+encodeURIComponent(idCaja)+'&turno='+encodeURIComponent(turno);
 
-			jsonFormat = {
+			/*jsonFormat = {
 				"registrar":"ocupado",
 				"ocupado":+ocupado,
 				"idcaja":+idCaja,
 				"turno":+turno,
-			};
+			};*/
 				
 	
 		break;
@@ -57,11 +57,14 @@ function procesarAtencion(){
 	if(conexion.readyState == 4){
 
 		var data = conexion.responseText;
+		
+		console.log(data);
 
 		//enviar los datos recibidos mediante ajax en formato json  al socket
 		socket.send(data);	
 		
 		var jsonData = JSON.parse(data);//decodificar los datos en formato json
+
 		var turno = document.getElementById('turno');//turno que se muestra en la pantalla
 		var noTurno = document.getElementById('noTurno');//control input noTurno
 

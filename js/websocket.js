@@ -32,19 +32,33 @@ function abierto(){
 function recibido(e){
 
 	var jsonData = JSON.parse(e.data);//decodificar el objeto json
+
 	var turno = document.getElementById('verTurno');
 	var caja = document.getElementById('verCaja');
-	
-	//si turno biene en 000 o undefined siginfica que no hay nuevos turnos
-	if(jsonData.turno != '000' && jsonData.turno != undefined){
-	
-		if(turno != null && caja != null){
 
-			turno.innerHTML = jsonData.turno;
-			caja.innerHTML = jsonData.idCaja;
-	
-			mostrarTurnos(jsonData.turno, jsonData.idCaja);
-	
+	//si turno biene en 000 o undefined siginfica que no hay nuevos turnos
+	if(typeof jsonData.type === 'string' && jsonData.type === 'data'){
+
+		if(typeof jsonData.turno === 'string' && 
+		   typeof jsonData.idCaja === 'string'){
+		
+			if(turno != null && caja != null){
+
+				if(jsonData != '' && jsonData.idCaja != '' && jsonData.status === 'success'){
+
+					turno.innerHTML = jsonData.turno;
+					caja.innerHTML = jsonData.idCaja;
+		
+					mostrarTurnos(jsonData.turno, jsonData.idCaja);
+
+				}
+		
+			}
+
+		}else{
+
+			console.error('El tipo de dato de turno o caja no es valido');
+
 		}
 
 	}

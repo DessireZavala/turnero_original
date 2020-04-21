@@ -52,25 +52,38 @@
 				}
 			break;
 			case'atencion':
+
 				$idCaja=limpiar($con,$_POST['idCaja']);
+			
 				$registrar=false;
+			
 				$editar=false;
+			
 				$turno='000';
+			
 				$error="";
+			
 				$status="";
+			
 				$mensaje="";
+			
 				$ocupado="";
 				
 				//funcion para dar un nuevo turno a la caja
 				function darTurno($con,$idCaja){
+			
 					$turno='000';
+			
 					$sql="select id,turno from turnos where atendido='0' order by id asc";
 					$error="Error al seleccionar el turno";
+			
 					$buscar=consulta($con,$sql,$error);
+			
 					$noResultados=mysqli_num_rows($buscar);
 					
 					//verificar si hay turnos disponibles
-					if($noResultados>0){
+					if($noResultados > 0){
+			
 						$resultado=mysqli_fetch_assoc($buscar);			
 						$fecha=date("Y-m-d H:i:s");
 						$turno=limpiar($con,$resultado['turno']);
@@ -87,35 +100,51 @@
 						$editar=consulta($con,$sql,$error);
 						
 						if($registrar==true && $editar==true){
-							$status="correcto";
+
+							$status="success";
 							$mensaje="Turno registrado";
 							$ocupado=true;
+						
 						}else{
+						
 							$status="error";
 							$mensaje="Error al dar los turnos".$error;
 							$ocupado=false;
+						
 						}
+
 					}else{
-						$ocupado='false';
+						
 						$status="mensaje";
 						$mensaje="No hay turnos disponibles";	
+						$ocupado=false;
+					
 					}
-					return $turno.'||'.$status.'||'.$mensaje.'||'.$ocupado;
+					
+					return array('turno' => $turno, 'status' => $status, 'mensaje' => $mensaje, 'ocupado' => $ocupado);
+				
 				}
 				
 				//funcion para consultar los turnos en la tabla atencion que no ha sido atendidos
 				function turnosEnAtencion($con,$idCaja){
 					//seleccionar los turnos en la tabla atencion que correspondan a la caja y que estan en o en la columna atendido
 					$sqlTurnosAtencion="select id,turno from atencion where atendido='0' and idCaja='$idCaja'";
+
 					$error="Error al seleccionar el turno en atencion ";
+					
 					return $buscarTurnosAtencion=consulta($con,$sqlTurnosAtencion,$error);	
+				
 				}
 				
 				//funcion para actualizar las atenciones de turnos
 				function actualizarAtencion($con,$idCaja,$turno){
+				
 					$sql="update atencion set atendido='1' where turno='$turno' and idCaja='$idCaja'";
+				
 					$error="Error al actualizar  el turno en atencion";
+				
 					$editar=consulta($con,$sql,$error);
+				
 				}
 				
 				//consultar los turnos en atencion
@@ -123,34 +152,54 @@
 				$noTurnosAtencion=mysqli_num_rows($turnosAtencion);
 				
 				if($noTurnosAtencion==0){
-					//dar un nuevo turno si no exuisten turnos sin atender 
-					$resultado=explode('||',darTurno($con,$idCaja));
-					$turno=$resultado[0];
-					$ocupado=$resultado[3];
-					$status=$resultado[1];
-					$mensaje=$resultado[2];	
+
+					//dar un nuevo turno si no existen turnos sin atender 
+					$resultado=darTurno($con, $idCaja);
+					
+					$turno=$resultado['turno'];
+					$ocupado=$resultado['ocupado'];
+					$status=$resultado['status'];
+					$mensaje=$resultado['mensaje'];	
+				
 				}else if($noTurnosAtencion==1){
+					
 					//si solamente hay un turno por atender se actualiza ela t}atencion y se da uno nuevo
+					
 					if($_POST['turno']!='000'){
+					
 						$turno=limpiar($con,$_POST['turno']);
+					
 					}else{
+					
 						$resultado=mysqli_fetch_assoc($turnosAtencion);
+					
 						$turno=$resultado['turno'];	
+					
 					}
+				
 					actualizarAtencion($con,$idCaja,$turno);
-					$resultado=explode('||',darTurno($con,$idCaja));
-					$turno=$resultado[0];
-					$ocupado=$resultado[3];
-					$status=$resultado[1];
-					$mensaje=$resultado[2];	
+				
+					$resultado=darTurno($con,$idCaja);
+				
+					$turno=$resultado['turno'];
+				
+					$ocupado=$resultado['ocupado'];
+				
+					$status=$resultado['status'];
+				
+					$mensaje=$resultado['mensaje'];	
 					
 				}else if($noTurnosAtencion>1){
+				
 					//si hay mas de un turno se actualiza la atencion del turno que estaba siendo atendido y se envia el siguiente 
 					$turno=limpiar($con,$_POST['turno']);
-					actualizarAtencion($con,$idCaja,$turno);
+				
+					actualizarAtencion($con, $idCaja, $turno);
 					
 					$turnosAtencion=turnosEnAtencion($con,$idCaja);
-					$resultado=mysqli_fetch_assoc($turnosAtencion);	
+
+	 				$resultado=mysqli_fetch_assoc($turnosAtencion);	
+
 					$turno=$resultado['turno'];
 					
 					$ocupado=true;
@@ -158,19 +207,39 @@
 					$mensaje="Existen turnos por atender";
 					
 				}else{
+				
 					$status="error";					
+				
 					$mensaje="Error en la veririfaccion de turnos en atencion";
+				
 					$ocupado=false;
+				
 				}//veriricar que no haya mas turnos en atencion
 								
-				$respuesta=array('status'=>$status,'mensaje'=>$mensaje,'turno'=>$turno,'ocupado'=>$ocupado,'idCaja'=>$idCaja);		
+				$respuesta=array('status' => $status,
+					             'mensaje' => $mensaje,
+					             'turno' => $turno, 
+					             'ocupado' => $ocupado,
+					             'idCaja' => $idCaja);		
 			break;
+
 			default:
+				
+				$respuesta=array('status' => 'error', 
+					             'mensaje' => 'Peticion desconocida', 
+					             'turno' => '000', 
+					             'opcuado' => false, 
+					             'idCaja' => '0');																	
+
 			break;
+		
 		}
-		//echo $resultado['turno'];
+		
 		echo json_encode($respuesta);
+
 	}else{
+
 		echo"<span>Opcion no valida</span>";
+
 	}
 ?>

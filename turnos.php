@@ -15,6 +15,46 @@
     	
         <div class="contenedor-principal">
         	
+
+            <?php
+
+                require_once('funciones/conexion.php');
+                require_once('funciones/funciones.php');
+                
+                //datos de la empresa
+                $sql = "select * from info_empresa";
+                $error = "Error al cargar datos de la empresa ";
+                $search = consulta($con, $sql, $error);
+                    
+                $info = mysqli_fetch_assoc($search); 
+
+
+                //turno atendido
+                $sqlTA = "select turno, idCaja from atencion order by turno desc";
+                $errorTA = "Error al cargar el turno atendido";
+                $searchTA = consulta($con, $sqlTA, $errorTA);
+
+                if(mysqli_num_rows($searchTA) > 1){
+
+                    $turno = mysqli_fetch_assoc($searchTA);
+                    $numeroTurno = $turno['turno'];
+                    $caja = $turno['idCaja'];
+
+                }else{
+
+                    $numeroTurno = '000';
+                    $caja = '0';
+
+                }
+                
+                
+                //ultimos 10 turnos atendidos
+                $sqlUT = "select id, turno, idCaja from atencion order by turno desc limit 10";
+                $errorUT = "Error al cargar los ultimos 10 turnos atendidos";
+                $searchUT = consulta($con, $sqlUT, $errorUT);
+
+            ?>
+
             <header>
 
                 <div class="marco-tablaTurnos">
@@ -22,12 +62,12 @@
                     <div class="contenedor-tablaTurnos">
                         <div class="columna-tablaTurnos">
                             <div class="tabla-turnosArriba">Turno</div>
-                            <div class="tabla-turnosAbajo" id="verTurno">000</div>
+                            <div class="tabla-turnosAbajo" id="verTurno"><?php echo $numeroTurno; ?></div>
 
                         </div>
                         <div class="columna-tablaTurnos">
                             <div class="tabla-turnosArriba">Caja</div>  
-                            <div class="tabla-turnosAbajo" id="verCaja">0</div>
+                            <div class="tabla-turnosAbajo" id="verCaja"><?php echo $caja; ?></div>
                         </div>
                     </div>
         
@@ -38,19 +78,6 @@
             <section class="contenido">
                         
                 <div class="contenido-izquierda">
-
-                    <?php 
-                        require_once('funciones/conexion.php');
-                        require_once('funciones/funciones.php');
-                        
-                        //datos de la empresa
-                        $sqlE = "select * from info_empresa";
-                        $errorE = "Error al cargar datos de la empresa ";
-                        $buscarE = consulta($con,$sqlE,$errorE);
-                            
-                        $info = mysqli_fetch_assoc($buscarE); 
-                        
-                    ?>
 
                     <header class="contenedor-logo">
 
@@ -82,6 +109,42 @@
                     
                          <table class="tabla-turnos" id="tabla-turnos">
                             <tr><th>Turno</th><th colspan="2">Caja</th></tr>
+                            <?php  
+
+                                if(mysqli_num_rows($searchUT) != 0){
+
+                                    $c = 0;
+
+                                    while ($row = mysqli_fetch_assoc($searchUT)){
+                                        
+                                        if($c === 0){
+
+                                            /*echo '<tr>
+                                                      <td>
+                                                            <span  class="primer-fila">'.$row['turno'].'</span>
+                                                      </td>
+                                                       <td class="no-caja">
+                                                            <span  class="caja primer-fila">'.$row['idCaja'].'</span>
+                                                        </td>
+                                                 </tr>';*/
+
+                                            echo "<tr><td><span  class='primer-fila'>$row[turno]</span></td><td class='td-caja'><span class='caja primer-fila'>Caja</span></td><td class='no-caja'><span  class='primer-fila'>$row[idCaja]</span></td></tr>";
+
+                                        }else{
+
+                                            echo "<tr><td>$row[turno]</td><td class='td-caja'><span class='caja'>Caja</span></td><td class='no-caja'>$row[idCaja]</td></tr>";
+
+                                        }
+
+                                        $c++;    
+                                        
+
+                                    }
+
+                                }
+
+                            ?>
+                            
                         </table>
                     
                     </div><!--contenedor turnos-->
