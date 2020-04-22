@@ -89,71 +89,108 @@ function errores(){
 
 var tr = "";
 
-var turno = [];
+var turnsTable = [];
 
-var caja = [];
+let newArray = [];
 
+//mostrar los turnos que se atienden 
 function mostrarTurnos(noTurno = '', noCaja = ''){
 
-	var insertar = true;
+	let turn = [];//array que almacenara los turnos a mostrar
 
-	for(var i = 0; i < turno.length; i++){
+	let displayedTurns = load_diplayed_turns();
 
-		if(turno[i] == noTurno){
+	//colocar el turno que se va a atender en el array
+	turn = {'turno':noTurno,
+	        'caja': noCaja};
 
-			insertar = false;	
+	console.log(displayedTurns.length+'/'+newArray.length);
+
+	if(displayedTurns.length > 0 && newArray.length === 0){
+
+		for(let i = 0; i < displayedTurns.length; i++){
+
+			if(i === 0){
+
+				newArray[i] = turn;			
+
+			}else{
+
+				newArray[i] = displayedTurns[i-1];
+
+			}
 
 		}
 
+		generate_table(newArray);
+
+	}else{
+
+		newArray.unshift(turn);
+
+		if(newArray.length > 10){
+
+			newArray.pop();
+
+		}
+		generate_table(newArray);
+
 	}
-	
-	//quitar el ultimo turno para que siempre haya 10
-	if(turno.length == 10 && caja.length == 10){
-	
-		caja.pop();
-	
-		turno.pop();
-	
+
+}
+
+//cargar turnos que se ya se estan mostrando
+function load_diplayed_turns(){
+
+	let turns = document.getElementById('turnos').value;
+
+	turns = turns.split('|tr|');
+
+	let arrayTable = [];
+	let arrayTurn = []
+
+	for(let i = 0; i < turns.length - 1; i++){
+
+			arrayTurn = turns[i].split('|');
+
+			arrayTable[i] = {'turno':arrayTurn[0], 
+						'caja':arrayTurn[1]};
+
 	}
-	
-	//dejar el array como estaba
-	turno = turno.reverse();
-	
-	caja = caja.reverse();
-	
-	if(insertar){		
-	
-		turno.push(noTurno);
-	
-		caja.push(noCaja);
-	
-	}
-	
-	//invertir el array
-	turno = turno.reverse();
-	
-	caja = caja.reverse();
-	
+
+	return arrayTable;
+
+}
+
+//generar la tabla con los turnos
+function generate_table(table = null){
+
 	var th = "<tr><th>Turno</th><th colspan='2'>Caja</th></tr>";
 	
-	for(var i = 0; i < turno.length; i++){	
+	for(var i = 0; i < table.length; i++){	
 	
 		if(i == 0){
 	
-			tr = "<tr><td><span  class='primer-fila'>"+turno[i]+"</span></td><td class='td-caja'><span class='caja primer-fila'>Caja</span></td><td class='no-caja'><span  class='primer-fila'>"+caja[i]+"</span></td></tr>".toString();
+			tr = "<tr><td><span  class='primer-fila'>"+table[i]['turno']+"</span></td><td class='td-caja'><span class='caja primer-fila'>Caja</span></td><td class='no-caja'><span  class='primer-fila'>"+table[i]['caja']+"</span></td></tr>".toString();
 	
 		}else{
 	
-			tr = tr+"<tr><td>"+turno[i]+"</td><td class='td-caja'><span class='caja'>Caja</span></td><td class='no-caja'>"+caja[i]+"</td></tr>".toString();
+			tr = tr+"<tr><td>"+table[i]['turno']+"</td><td class='td-caja'><span class='caja'>Caja</span></td><td class='no-caja'>"+table[i]['caja']+"</td></tr>".toString();
 	
 		}
 	
 	}
 	
+	display_table(th + tr);
+
+}
+
+//mostrar la tabla de turnos en pantalla
+function display_table(table = ''){
+
 	var tablaTurnos = document.getElementById('tabla-turnos');
 	
-	tablaTurnos.innerHTML = th + tr;//imprimir los turnos que han pasado y el turno que esta siendo atendido 
+	tablaTurnos.innerHTML = table;//imprimir los turnos que han pasado y el turno que esta siendo atendido 
 	
 	tono.play();
-
 }

@@ -114,19 +114,17 @@
                                 if(mysqli_num_rows($searchUT) != 0){
 
                                     $c = 0;
+                                    $data = '';
 
                                     while ($row = mysqli_fetch_assoc($searchUT)){
                                         
-                                        if($c === 0){
+                                        //if($c > 0){
 
-                                            /*echo '<tr>
-                                                      <td>
-                                                            <span  class="primer-fila">'.$row['turno'].'</span>
-                                                      </td>
-                                                       <td class="no-caja">
-                                                            <span  class="caja primer-fila">'.$row['idCaja'].'</span>
-                                                        </td>
-                                                 </tr>';*/
+                                            $data .=  $row['turno'].'|'.$row['idCaja'].'|tr|';
+                                        
+                                        //}
+
+                                        if($c === 0){
 
                                             echo "<tr><td><span  class='primer-fila'>$row[turno]</span></td><td class='td-caja'><span class='caja primer-fila'>Caja</span></td><td class='no-caja'><span  class='primer-fila'>$row[idCaja]</span></td></tr>";
 
@@ -138,7 +136,6 @@
 
                                         $c++;    
                                         
-
                                     }
 
                                 }
@@ -146,6 +143,8 @@
                             ?>
                             
                         </table>
+
+                        <input type="hidden" name="turnos" id="turnos" value="<?php echo $data; ?>">
                     
                     </div><!--contenedor turnos-->
 
@@ -165,7 +164,6 @@
 		
         <script src="js/funcionesGenerales.js"></script>
 		<script src="js/websocket.js"></script>
-		<!--<script src="js/turnos.js"></script>-->
  
     </body>
 
