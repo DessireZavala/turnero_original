@@ -19,6 +19,7 @@ function iniciarWebsocket(){
 
 }
 
+//se activa cuando se conecta el cliente a el socket
 function abierto(){
 
 	if(imgStatus != null){
@@ -29,6 +30,7 @@ function abierto(){
 
 }
 
+//funcion que recibe los emnsajes del socket
 function recibido(e){
 
 	var jsonData = JSON.parse(e.data);//decodificar el objeto json
@@ -104,12 +106,14 @@ function mostrarTurnos(noTurno = '', noCaja = ''){
 	turn = {'turno':noTurno,
 	        'caja': noCaja};
 
-	console.log(displayedTurns.length+'/'+newArray.length);
-
+	//verificar si ya hay turnos en pantalla
 	if(displayedTurns.length > 0 && newArray.length === 0){
+
+		//si hay turnos en pantalla se entra aqui
 
 		for(let i = 0; i < displayedTurns.length; i++){
 
+			//generacion de array con los turnos en patalla
 			if(i === 0){
 
 				newArray[i] = turn;			
@@ -126,6 +130,8 @@ function mostrarTurnos(noTurno = '', noCaja = ''){
 
 	}else{
 
+		//si no hay turnos en pantalla se entra aqui
+
 		newArray.unshift(turn);
 
 		if(newArray.length > 10){
@@ -133,13 +139,14 @@ function mostrarTurnos(noTurno = '', noCaja = ''){
 			newArray.pop();
 
 		}
+
 		generate_table(newArray);
 
 	}
 
 }
 
-//cargar turnos que se ya se estan mostrando
+//cargar turnos que se ya se estan mostrando en pantalla
 function load_diplayed_turns(){
 
 	let turns = document.getElementById('turnos').value;
@@ -154,7 +161,7 @@ function load_diplayed_turns(){
 			arrayTurn = turns[i].split('|');
 
 			arrayTable[i] = {'turno':arrayTurn[0], 
-						'caja':arrayTurn[1]};
+						     'caja':arrayTurn[1]};
 
 	}
 
@@ -193,4 +200,5 @@ function display_table(table = ''){
 	tablaTurnos.innerHTML = table;//imprimir los turnos que han pasado y el turno que esta siendo atendido 
 	
 	tono.play();
+
 }

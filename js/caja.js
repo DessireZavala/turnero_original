@@ -35,14 +35,6 @@ function detectarAccion(e){
 			fichero = 'consultas/registrar.php';
 	
 			var datos = 'registrar=atencion'+'&ocupado='+encodeURIComponent(ocupado)+'&idCaja='+encodeURIComponent(idCaja)+'&turno='+encodeURIComponent(turno);
-
-			/*jsonFormat = {
-				"registrar":"ocupado",
-				"ocupado":+ocupado,
-				"idcaja":+idCaja,
-				"turno":+turno,
-			};*/
-				
 	
 		break;
 	
@@ -58,8 +50,6 @@ function procesarAtencion(){
 
 		var data = conexion.responseText;
 		
-		console.log(data);
-
 		//enviar los datos recibidos mediante ajax en formato json  al socket
 		socket.send(data);	
 		

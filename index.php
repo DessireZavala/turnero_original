@@ -64,18 +64,18 @@
 				},false);
 				
 				function procesarReseteo(){
-					
+
 					if(conexion.readyState == 4){
 					
 						var data = JSON.parse(conexion.responseText);
 					
 						if(data.status == "correcto"){
 							
-							alert("Turnos reseteados correctamente");
+							alert(data.mensaje);
 						
 						}else{
 						
-							console.log("Error al resetear los turnos");
+							console.log(data.mensaje);
 						
 						}
 					

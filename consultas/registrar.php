@@ -1,21 +1,40 @@
 <?php
+
 	if(isset($_POST['registrar'])){
+
 		require_once('../funciones/conexion.php');
 		require_once('../funciones/funciones.php');
+
 		$respuesta=[];
+
 		switch($_POST['registrar']){
 			case'reset-turnos':
+				
 				$fecha=date("Y-m-d H:i:s");
 				$turno="000";
-				$sql="insert into turnos (turno,fechaRegistro) values ('$turno','$fecha')";
-				$error="Error al resetear el turno";
-				$registrar=consulta($con,$sql,$error);
 				
-				if($registrar==true){
-					$respuesta=array('status'=>'correcto','mensaje'=>'Turno registrado','turno'=>$turno);		
+				$sql = "DELETE FROM turnos;";
+				$sql .= "ALTER TABLE turnos AUTO_INCREMENT=0";
+				$error = "Error al resetear turno";
+
+				$resetTurn = multi_consulta($con, $sql, $error);
+				
+				$sql = "DELETE FROM atencion;";
+				$sql .= "ALTER TABLE atencion AUTO_INCREMENT=0";
+				$error = "Error al resetear atencion";
+				
+				$resetAtention = multi_consulta($con, $sql, $error);
+				
+				if($resetTurn == true && $resetAtention == true){
+				
+					$respuesta = array('status'=>'correcto','mensaje'=>'Turnos reseteados correctamente','turno'=>$turno);		
+				
 				}else{
-					$respuesta=array('status'=>'error','mensaje'=>'Error al registrar el turno','turno'=>000);	
-				}	
+				
+					$respuesta = array('status'=>'error','mensaje'=>'Error al resetear turnos','turno'=>000);	
+				
+				}
+
 			break;
 			case'turno':
 				$sql="select id from turnos";

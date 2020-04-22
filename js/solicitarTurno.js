@@ -41,7 +41,7 @@ function detectarAccion(e){
 
 function procesarSolicitud(){
 
-	if(conexion.readyState){
+	if(conexion.readyState === 4){
 
 		var jsonData = JSON.parse(conexion.responseText);
 		var noTurno = document.getElementById('turno');
