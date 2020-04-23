@@ -8,7 +8,7 @@ function iniciarWebsocket(){
 
 	imgStatus = document.getElementById('imgStatus');
 
-	socket = new WebSocket("ws://192.168.1.2/php/proyectos/turnero/turnero/server.php");
+	socket = new WebSocket("ws://192.168.1.2:8888/php/proyectos/turnero/turnero/server.php");
 
 	socket.addEventListener('open', abierto, false);
 	socket.addEventListener('message', recibido, false);
@@ -108,7 +108,7 @@ function mostrarTurnos(noTurno = '', noCaja = ''){
 
 
 	//verificar si ya se tienen turnos en pantalla cuando se carga el visualizador de turnos
->>>>>>> changebranch
+
 	if(displayedTurns.length > 0 && newArray.length === 0){
 
 		//si hay turnos en pantalla se entra aqui
