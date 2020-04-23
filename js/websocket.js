@@ -104,8 +104,6 @@ function mostrarTurnos(noTurno = '', noCaja = ''){
 	turn = {'turno':noTurno,
 	        'caja': noCaja};
 
-	console.log(displayedTurns.length+'/'+newArray.length);
-
 	if(displayedTurns.length > 0 && newArray.length === 0){
 
 		for(let i = 0; i < displayedTurns.length; i++){
