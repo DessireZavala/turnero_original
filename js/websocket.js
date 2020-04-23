@@ -106,7 +106,8 @@ function mostrarTurnos(noTurno = '', noCaja = ''){
 	turn = {'turno':noTurno,
 	        'caja': noCaja};
 
-	//verificar si ya hay turnos en pantalla
+
+	//verificar si ya se tienen turnos en pantalla cuando se carga el visualizador de turnos
 
 	if(displayedTurns.length > 0 && newArray.length === 0){
 
