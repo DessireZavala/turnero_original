@@ -107,6 +107,7 @@ function mostrarTurnos(noTurno = '', noCaja = ''){
 	        'caja': noCaja};
 
 	//verificar si ya hay turnos en pantalla
+
 	if(displayedTurns.length > 0 && newArray.length === 0){
 
 		//si hay turnos en pantalla se entra aqui
