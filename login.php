@@ -81,7 +81,7 @@
                         
                         	<label>Usuario</label><input type="text" name="usuario" id="usuario" placeholder="Ingrese su usuario">
                         	<label>Password</label><input type="password" name="password" id="password" placeholder="Ingrese su password">
-                    		<input type="submit" name="login" id="login" value="Loign">
+                    		<input type="submit" name="login" id="login" value="Login">
                     	
                     	</div>
                         

@@ -95,8 +95,8 @@
                         
                         <div class="contenedor-reproductor">
                         
-                            <iframe  src="https://www.youtube.com/embed/zw9-xodidNA?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                        
+                            <!--<iframe  src="https://www.youtube.com/embed/zw9-xodidNA?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/v77FVSTTCvg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> 
                         </div>
                     
                     </div>
@@ -154,9 +154,65 @@
             
             <footer class="footer">
                 
-                <marquee class="noticias">Precio del dolar: 20.00MN - solicita tu targeta de credito - Compra en linea tus marcas favoritas sin dar tus datos - Realiza tus operaciones sin acudir a tu sucursal</marquee>
+                <marquee class="noticias">Robotica, Impresion 3D y algo mas - Suscribete a mi canal y activa la campanita, de esta manera apoyas mi trabajo, Muchas Gracias.</marquee>
 
             </footer>
+			
+
+<!--			
+			<footer class="footer">
+
+<?php
+
+$RSS = new LectorRSS ("http://feeds.feedburner.com/aporrea");
+class LectorRSS {
+var $url;
+var $data;
+function LectorRSS ($url){
+$this->url;
+$this->data = implode ("", file ($url));
+}
+function obtener_items (){
+preg_match_all ("/<item .*>.*<\/item>/xsmUi", $this->data, $matches);
+$items = array ();
+foreach ($matches[0] as $match){
+$items[] = new RssItem ($match);
+}
+return $items;
+}
+}
+class RssItem {
+var $title, $url;
+function RssItem ($xml){
+$this->populate ($xml);
+}
+function populate ($xml){
+preg_match ("/<title> (.*) <\/title>/xsmUi", $xml, $matches);
+$this->title = $matches[1];
+preg_match ("/<link> (.*) <\/link>/xsmUi", $xml, $matches);
+$this->url = $matches[1];
+}
+function obtener_titulo (){
+return $this->title;
+}
+function obtener_url (){
+return $this->url;
+}
+}
+echo "<div>";
+echo "<marquee behavior='Scroll' class='noticias' behavior='alternate'>";
+foreach ($RSS->obtener_items () as $item){
+printf ('<a target="_BLANK" href="%s">%s. </a>', $item->obtener_url (), $item->obtener_titulo ());
+}
+echo "</marquee>";
+echo "</div>";
+?>
+
+</footer>
+			
+-->			
+			
+			
         
         </div><!--contenedor principal-->
         
